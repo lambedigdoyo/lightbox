@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- ==========================
+https://htmledit.squarefree.com/
+=========================== -->
+<meta charset='utf-8'/>
+<meta name='viewport' content='width=device-width, initial-scale=1'/>
+<title>Real-time HTML Editor Squarefree</title>
+<script type="text/javascript">
+var editSFhtml = 
+'<html class="expand close">' +
+'<head>' +
+'<style type="text/css">' +
+'.expand { width: 100%; height: 100%; }' +
+'.close { border: none; margin: 0px; padding: 0px; }' +
+'html,body { overflow: hidden; }' +
+'<\/style>' +
+'<\/head>' +
+'<body class="expand close" onload="document.myF.myTa.focus(); document.myF.myTa.select();">' +
+'<form class="expand close" name="myF">' +
+'<textarea class="expand close" style="font:14px Consolas; padding:10px; background:#def;" name="myTa" wrap="hard" spellcheck="false">' +
+'<\/textarea>' +
+'<\/form>' +
+'<\/body>' +
+'<\/html>';
+
+var defaultStup = '<!DOCTYPE html>\n' + '<html>\n' + '<head>\n' + '  <title>My Project</title>\n' + '  <meta charset="utf-8"/>\n' + '  <meta name="viewport" content="width=device-width, initial-scale=1"/>\n\n' + '<style>\n' + 'h2{\n  color: red\n}\n' + '</style>\n\n' + '</head>\n' + '<body>\n\n' + '<h2>Welcome to the real-time HTML editor!<\/h2>\n' +
+'<p>Type HTML in the textarea above, and it will magically appear in the frame below.<\/p>\n\n' + '</body>\n' + '</html>';
+
+// I don't want this stuff to appear in the box at the top because I feel it's likely to be distracting.
+var extraStup = '<div style="position:absolute; margin:.3em; bottom:0em; right:0em;"><small>\n  Created by <a href="http://www.squarefree.com/" target="_top">Jesse Ruderman<\/a> and hosted by <a href="http://www.dreamhost.com/rewards.cgi?jesseruderman" target="_top">DreamHost<\/a>.\n<\/small><\/div>';
+
+var myOld = '';
+         
+function init()
+{
+  window.editSF.document.write(editSFhtml);
+  window.editSF.document.close();
+  window.editSF.document.myF.myTa.value = defaultStup;
+  myUpdate();
+}
+
+function myUpdate()
+{
+  var myArea = window.editSF.document.myF.myTa;
+  var dSF = SFframe.document; 
+
+  if (myOld != myArea.value) {
+    myOld = myArea.value;
+    dSF.open();
+    dSF.write(myOld);
+    if (myOld.replace(/[\r\n]/g,'') == defaultStup.replace(/[\r\n]/g,''))
+      dSF.write(extraStup);
+    dSF.close();
+  }
+
+  window.setTimeout(myUpdate, 150);
+}
+
+</script>
+</head>
+
+<frameset resizable="yes" cols="50%,*" onload="init();">
+  <!-- about:blank confuses opera, so use javascript: URLs instead -->
+  <frame name="editSF" src="javascript:'';">
+  <frame name="SFframe" src="javascript:'';">
+</frameset>
+
+</html>
